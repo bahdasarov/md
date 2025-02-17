@@ -15,10 +15,10 @@ graph TD
 
   %% Styling
   A -->|Grows with new features| B
-  style A fill:#ffcc00,stroke:#333,stroke-width:2px
-  style B fill:#ff9966,stroke:#333,stroke-width:2px
-  style G fill:#66ccff,stroke:#333,stroke-width:2px
-
+  style A fill:#ffcc00,stroke:#333,stroke-width:2px;
+  style B fill:#ff9966,stroke:#333,stroke-width:2px;
+  style G fill:#66ccff,stroke:#333,stroke-width:2px;
+```
 
 ### **Explanation of Flow**
 1️⃣ **Facade** receives the request and **delegates it** to Chain of Responsibility.  
