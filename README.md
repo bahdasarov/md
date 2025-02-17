@@ -1,22 +1,39 @@
 ```mermaid
 graph TD
   %% Facade as the Core
-  A[Facade: Core of the Application] -->|Delegates request| B[Chain of Responsibility]
-  
-  %% Chain of Responsibility handles step-by-step processing
-  B -->|1. Validate Request| C[Filter Request]
-  C -->|2. Search in Document Base| D[Search Documents]
-  D -->|3. Generate LLM Response| E[Generate LLM Response]
-  E -->|4. Format Citations & Charts| F[Format Citations & Charts]
-  
+  A[Facade: Core of the Application] -->|Delegates to| B1[DocumentRetriever]
+  A -->|Delegates to| B2[AssistantLLM]
+  A -->|Delegates to| B3[CitationGenerator]
+  A -->|Delegates to| B4[VisualizationGenerator]
+
+  %% Chains of Responsibility within each component
+  B1 -->|Step 1: Validate Request| C1[Filter Documents]
+  C1 -->|Step 2: Retrieve Relevant Documents| D1[Search Database]
+  D1 -->|Step 3: Rank Results| E1[Rank Documents]
+
+  B2 -->|Step 1: Process Query| C2[Generate LLM Response]
+  C2 -->|Step 2: Refine Answer| D2[Post-process Response]
+
+  B3 -->|Step 1: Extract Key References| C3[Identify Sources]
+  C3 -->|Step 2: Format Citations| D3[Generate Markdown Citations]
+
+  B4 -->|Step 1: Prepare Data| C4[Extract Key Insights]
+  C4 -->|Step 2: Generate Visualization| D4[Create Charts]
+
   %% Observer collects results and streams them
-  F -->|Sends output to| G[Observer: Stream Queue]
+  E1 -->|Sends documents to| G[Observer: Stream Queue]
+  D2 -->|Sends LLM output to| G
+  D3 -->|Sends citations to| G
+  D4 -->|Sends visualizations to| G
   G -->|Streams final response| H((User))
 
   %% Styling
-  A -->|Grows with new features| B
+  A -->|Manages dependencies| B1 & B2 & B3 & B4
   style A fill:#ffcc00,stroke:#333,stroke-width:2px;
-  style B fill:#ff9966,stroke:#333,stroke-width:2px;
+  style B1 fill:#ff9966,stroke:#333,stroke-width:2px;
+  style B2 fill:#ff9966,stroke:#333,stroke-width:2px;
+  style B3 fill:#ff9966,stroke:#333,stroke-width:2px;
+  style B4 fill:#ff9966,stroke:#333,stroke-width:2px;
   style G fill:#66ccff,stroke:#333,stroke-width:2px;
 ```
 
